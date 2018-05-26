@@ -20,13 +20,10 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('question/', views.QuestionSetList.as_view()),
-    path('xdquestion/', views.ExDentalQuestionList.as_view()),
-    path('xmquestion/', views.ExMedicalQuestionList.as_view()),
-    path('xvquestion/', views.ExVarsityQuestionList.as_view()),
-    path('vquestion/', views.VarsityQuestionList.as_view()),
-    path('cquestion/', views.ChapterQuestionList.as_view()),
-    path('ehistory/', views.ExamHistoryList.as_view()),
+    path('q_set/', views.QuestionSetList.as_view()),
+    path('x_q/', views.ExQuestionList.as_view()),
+    path('c_q/', views.ChapterQuestionList.as_view()),
+    path('e_history/', views.ExamHistoryList.as_view()),
 
 ]
 
