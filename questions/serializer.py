@@ -5,6 +5,7 @@ from .models import ExDentalQuestion
 from .models import VarsityQuestion
 from .models import ExVarsityQuestion
 from .models import ChapterQuestion
+from .models import ExamHistory
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -40,4 +41,10 @@ class ExVarsityQuestionSerializer(serializers.ModelSerializer):
 class ChapterQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChapterQuestion
+        fields = '__all__'
+
+
+class ExamHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExamHistory
         fields = '__all__'
