@@ -10,7 +10,7 @@ from .models import ExamHistory
 
 class QuestionSetSerializer(serializers.ModelSerializer):
     class Meta:
-        model = QuestionSet, ExMedicalQuestion, ExDentalQuestion, VarsityQuestion, ExVarsityQuestion, ChapterQuestion
+        model = QuestionSet
         fields = '__all__'
 
 
