@@ -59,7 +59,7 @@ def get_chapter_question(request, sub, chapter):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ChapterQuestion.objects.get(SubName=sub, ChapterName=chapter)
+        questions = ChapterQuestion.objects.filter(SubName=sub, ChapterName=chapter)
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
@@ -67,7 +67,7 @@ def get_chapter_question(request, sub, chapter):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ChapterQuestionSerializer(questions)
+        serializer = ChapterQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -88,7 +88,9 @@ def get_chapter(request, sub):
     Retrieve, update or delete a code snippet.
     """
     try:
-        chapters = ChapterQuestion.objects.get(SubName=sub)
+        chapters = ChapterQuestion.objects.filter(SubName=sub)
+
+        #chapters = chapters.objects.all()
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
@@ -96,7 +98,7 @@ def get_chapter(request, sub):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ChapterQuestionSerializer(chapters)
+        serializer = ChapterQuestionSerializer(chapters, many=True)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -117,7 +119,7 @@ def get_ex_question_y_mvd(request, year, mvd):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ExQuestion.objects.get(QuestionId=year, MVD=mvd)
+        questions = ExQuestion.objects.filter(QuestionId=year, MVD=mvd)
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
@@ -125,7 +127,7 @@ def get_ex_question_y_mvd(request, year, mvd):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ExQuestionSerializer(questions)
+        serializer = ExQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -147,7 +149,7 @@ def get_ex_question_y(request, year):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ExQuestion.objects.get(QuestionId=year)
+        questions = ExQuestion.objects.filter(QuestionId=year)
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
@@ -155,7 +157,7 @@ def get_ex_question_y(request, year):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ExQuestionSerializer(questions)
+        serializer = ExQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -176,7 +178,7 @@ def get_history_user(request, user_id):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ExamHistory.objects.get(UserId=user_id)
+        questions = ExamHistory.objects.filter(UserId=user_id)
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
@@ -184,7 +186,7 @@ def get_history_user(request, user_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = ExamHistorySerializer(questions)
+        serializer = ExamHistorySerializer(questions, many=True)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
