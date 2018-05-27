@@ -12,11 +12,12 @@ class QuestionSet(models.Model):
         db_table = 'QuestionSet'
 
     def __str__(self):
-        return self.QuestionName
+        return str(self.QuestionName)
 
 
 class ChapterQuestion(models.Model):
-    MVD = models.IntegerField;
+    MVD = models.CharField(max_length=1)
+    QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     SubName = models.CharField(max_length=50)
     SubID = models.CharField(max_length=50)
     ChapterName = models.CharField(max_length=50)
@@ -31,11 +32,11 @@ class ChapterQuestion(models.Model):
         db_table = 'ChapterQuestion'
 
     def __str__(self):
-        return self.SubName
+        return str(self.SubName)
 
 
 class ExQuestion(models.Model):
-    MVD = models.IntegerField;
+    MVD = models.CharField(max_length=1)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     Question = models.TextField(max_length=1000)
     Option1 = models.CharField(max_length=50)
@@ -48,12 +49,12 @@ class ExQuestion(models.Model):
         db_table = 'ExQuestion'
 
     def __str__(self):
-        return self.QuestionId
+        return str(self.QuestionId)
 
 
 class ExamHistory(models.Model):
-    User_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    Question_id = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
+    UserId = models.ForeignKey(User, on_delete=models.CASCADE)
+    QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     TableName = models.CharField(max_length=15)
     marks = models.IntegerField(null=True)
     position = models.IntegerField(null=True)
@@ -62,4 +63,4 @@ class ExamHistory(models.Model):
         db_table = 'ExamHistory'
 
     def __str__(self):
-        return self.marks
+        return str(self.marks)
