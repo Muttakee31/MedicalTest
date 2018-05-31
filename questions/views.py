@@ -16,8 +16,12 @@ class QuestionSetList(APIView):
         serializer = QuestionSetSerializer(questions, many=True)
         return Response(serializer.data)
 
-    def post(self):
-        pass
+    def post(self, request):
+        serializer =QuestionSetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ExQuestionList(APIView):
@@ -27,8 +31,12 @@ class ExQuestionList(APIView):
         serializer = ExQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
-    def post(self):
-        pass
+    def post(self, request):
+        serializer = ExQuestionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChapterQuestionList(APIView):
@@ -38,8 +46,12 @@ class ChapterQuestionList(APIView):
         serializer = ChapterQuestionSerializer(questions, many=True)
         return Response(serializer.data)
 
-    def post(self):
-        pass
+    def post(self, request):
+        serializer = ChapterQuestionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ExamHistoryList(APIView):
@@ -49,8 +61,15 @@ class ExamHistoryList(APIView):
         serializer = ExamHistorySerializer(questions, many=True)
         return Response(serializer.data)
 
-    def post(self):
-        pass
+    def post(self, request):
+        print(request.data)
+        serializer = ExamHistorySerializer(data=request.data)
+
+        if serializer.is_valid():
+
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
