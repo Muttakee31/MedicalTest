@@ -56,7 +56,7 @@ class ExamHistory(models.Model):
     UserId = models.ForeignKey(User, on_delete=models.CASCADE)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     TableName = models.CharField(max_length=15)
-    marks = models.IntegerField(null=True)
+    marks = models.FloatField(null=True)
     position = models.IntegerField(null=True)
 
     class Meta:

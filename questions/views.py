@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
@@ -62,13 +63,21 @@ class ExamHistoryList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print(request.data)
-        serializer = ExamHistorySerializer(data=request.data)
+        data = JSONParser().parse(request)
+        qId = data['QuestionId']
+        uId = data['UserId']
+        print(data['QuestionId'])
+        print(data['UserId'])
+
+        existent_res = ExamHistory.objects.filter(QuestionId=qId, UserId=uId)
+
+        serializer = ExamHistorySerializer(data=data)
 
         if serializer.is_valid():
-
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            if not existent_res:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response("notSaved", status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

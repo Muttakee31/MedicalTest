@@ -26,4 +26,5 @@ class ChapterQuestionSerializer(serializers.ModelSerializer):
 class ExamHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamHistory
-        fields = '__all__'
+    #    fields = '__all__'
+        fields = ('UserId', 'QuestionId', 'TableName', 'marks', 'position')
