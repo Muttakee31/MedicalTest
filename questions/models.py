@@ -27,6 +27,7 @@ class ChapterQuestion(models.Model):
     Option3 = models.CharField(max_length=50)
     Option4 = models.CharField(max_length=50)
     CorrectAns = models.CharField(max_length=1)
+    Equation = models.ImageField(null=True)
 
     class Meta:
         db_table = 'ChapterQuestion'
@@ -44,6 +45,7 @@ class ExQuestion(models.Model):
     Option3 = models.CharField(max_length=50)
     Option4 = models.CharField(max_length=50)
     CorrectAns = models.CharField(max_length=1)
+    Equation = models.ImageField(null=True)
 
     class Meta:
         db_table = 'ExQuestion'
@@ -56,11 +58,40 @@ class ExamHistory(models.Model):
     UserId = models.ForeignKey(User, on_delete=models.CASCADE)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     TableName = models.CharField(max_length=15)
-    marks = models.FloatField(null=True)
-    position = models.IntegerField(null=True)
+    Marks = models.FloatField(null=True)
+    Position = models.IntegerField(null=True)
 
     class Meta:
         db_table = 'ExamHistory'
 
     def __str__(self):
         return str(self.marks)
+
+
+class Board(models.Model):
+    Notice = models.CharField(max_length=2000)
+    Due_date = models.DateTimeField(null=True)
+    Created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'Noticeboard'
+
+    def __str__(self):
+        return str(self.notice)
+
+
+class Profile(models.Model):
+    IdToken = models.CharField(max_length=100)
+    userID = models.CharField(max_length=100)
+    Name = models.TextField(max_length=1000)
+    Email = models.CharField(max_length=50)
+    Avatar = models.ImageField(null=True)
+    Balance = models.IntegerField(default=0)
+    Gender = models.CharField(max_length=5, null=True)
+    Date_of_birth = models.DateField(null=True)
+
+    class Meta:
+        db_table = 'Profile'
+
+    def __str__(self):
+        return str(self.name)
