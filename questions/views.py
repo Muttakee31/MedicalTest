@@ -5,9 +5,10 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory
+from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, Profile, Board
 # Create your views here.
-from .serializer import QuestionSetSerializer, ExamHistorySerializer, ExQuestionSerializer, ChapterQuestionSerializer
+from .serializer import QuestionSetSerializer, ExamHistorySerializer, \
+    ExQuestionSerializer, ChapterQuestionSerializer, ProfileSerializer, BoardSerializer
 
 
 class QuestionSetList(APIView):
@@ -18,7 +19,7 @@ class QuestionSetList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer =QuestionSetSerializer(data=request.data)
+        serializer = QuestionSetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -81,6 +82,43 @@ class ExamHistoryList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ProfileList(APIView):
+
+    def get(self, request):
+        questions = Profile.objects.all()
+        serializer = ProfileSerializer(questions, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        data = JSONParser().parse(request)
+        qId = data['IdToken']
+        uId = data['userId']
+        print(data['IdToken'])
+        print(data['userId'])
+
+        existent_res = Profile.objects.filter(IdToken=qId, userId=uId)
+
+        serializer = ProfileSerializer(data=data)
+
+        if serializer.is_valid():
+            if not existent_res:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response("notSaved", status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BoardList(APIView):
+
+    def get(self, request):
+        questions = Board.objects.all()
+        serializer = BoardSerializer(questions, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        pass
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def get_chapter_question(request, sub, chapter):
     """
@@ -118,7 +156,7 @@ def get_chapter(request, sub):
     try:
         chapters = ChapterQuestion.objects.filter(SubName=sub)
 
-        #chapters = chapters.objects.all()
+        # chapters = chapters.objects.all()
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)

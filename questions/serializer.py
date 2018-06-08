@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import QuestionSet
 from .models import ExQuestion
 from .models import ChapterQuestion
-from .models import ExamHistory
+from .models import ExamHistory, Profile, Board
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -26,5 +26,18 @@ class ChapterQuestionSerializer(serializers.ModelSerializer):
 class ExamHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamHistory
-    #    fields = '__all__'
+        #    fields = '__all__'
         fields = ('UserId', 'QuestionId', 'TableName', 'marks', 'position')
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
+class BoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Board
+        fields = '__all__'
+
