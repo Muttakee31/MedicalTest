@@ -19,6 +19,8 @@ class Command(BaseCommand):
                 cQ.MVD = "D"
                 print(sheet.cell(j, 1).value)
                 cQ.Question = sheet.cell(j, 1).value
+                if QuestionSet.objects.filter(Question=cQ.Question).exists():
+                    continue
                 print(cQ.Question)
                 cQ.Option1 = sheet.cell(j, 2).value
                 print(cQ.Option1)
