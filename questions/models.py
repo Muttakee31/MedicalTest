@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class QuestionSet(models.Model):
-    QuestionName = models.CharField(max_length=40)
+    QuestionName = models.CharField(max_length=1000)
     QuestionPrice = models.IntegerField
 
     class Meta:
@@ -18,15 +18,15 @@ class QuestionSet(models.Model):
 class ChapterQuestion(models.Model):
     MVD = models.CharField(max_length=1)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
-    SubName = models.CharField(max_length=50)
-    SubID = models.CharField(max_length=50)
+    SubName = models.CharField(max_length=255)
+    SubID = models.CharField(max_length=255)
     ChapterName = models.CharField(max_length=50)
     Question = models.TextField(max_length=1000)
-    Option1 = models.CharField(max_length=50)
-    Option2 = models.CharField(max_length=50)
-    Option3 = models.CharField(max_length=50)
-    Option4 = models.CharField(max_length=50)
-    CorrectAns = models.CharField(max_length=1)
+    Option1 = models.CharField(max_length=1000)
+    Option2 = models.CharField(max_length=1000)
+    Option3 = models.CharField(max_length=1000)
+    Option4 = models.CharField(max_length=1000)
+    CorrectAns = models.CharField(max_length=5)
     Equation = models.ImageField(null=True)
 
     class Meta:
@@ -40,11 +40,11 @@ class ExQuestion(models.Model):
     MVD = models.CharField(max_length=1)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     Question = models.TextField(max_length=1000)
-    Option1 = models.CharField(max_length=50)
-    Option2 = models.CharField(max_length=50)
-    Option3 = models.CharField(max_length=50)
-    Option4 = models.CharField(max_length=50)
-    CorrectAns = models.CharField(max_length=1)
+    Option1 = models.CharField(max_length=1000)
+    Option2 = models.CharField(max_length=1000)
+    Option3 = models.CharField(max_length=1000)
+    Option4 = models.CharField(max_length=1000)
+    CorrectAns = models.CharField(max_length=5)
     Equation = models.ImageField(null=True)
 
     class Meta:
@@ -57,7 +57,7 @@ class ExQuestion(models.Model):
 class ExamHistory(models.Model):
     UserId = models.ForeignKey(User, on_delete=models.CASCADE)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
-    TableName = models.CharField(max_length=15)
+    TableName = models.CharField(max_length=255)
     Marks = models.FloatField(null=True)
     Position = models.IntegerField(null=True)
 
@@ -69,7 +69,7 @@ class ExamHistory(models.Model):
 
 
 class Board(models.Model):
-    Notice = models.CharField(max_length=2000)
+    Notice = models.CharField(max_length=10000)
     Due_date = models.DateTimeField(null=True)
     Created_at = models.DateTimeField(auto_now_add=True)
 
@@ -81,13 +81,13 @@ class Board(models.Model):
 
 
 class Profile(models.Model):
-    IdToken = models.CharField(max_length=100)
-    userID = models.CharField(max_length=100)
+    IdToken = models.CharField(max_length=1000)
+    userID = models.CharField(max_length=1000)
     Name = models.TextField(max_length=1000)
-    Email = models.CharField(max_length=50)
+    Email = models.CharField(max_length=1000)
     Avatar = models.ImageField(null=True)
     Balance = models.IntegerField(default=0)
-    Gender = models.CharField(max_length=5, null=True)
+    Gender = models.CharField(max_length=10, null=True)
     Date_of_birth = models.DateField(null=True)
 
     class Meta:
