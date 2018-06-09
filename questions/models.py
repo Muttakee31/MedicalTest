@@ -20,7 +20,7 @@ class ChapterQuestion(models.Model):
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     SubName = models.CharField(max_length=255)
     SubID = models.CharField(max_length=255)
-    ChapterName = models.CharField(max_length=50)
+    ChapterName = models.CharField(max_length=1000)
     Question = models.TextField(max_length=1000)
     Option1 = models.CharField(max_length=1000)
     Option2 = models.CharField(max_length=1000)
