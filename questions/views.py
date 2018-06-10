@@ -8,6 +8,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import requests
+import json
 import hashlib
 from django.db.models import Q
 from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, Profile, Board
@@ -275,21 +276,42 @@ def get_history_user(request, user_id):
 @require_POST
 @csrf_exempt
 def ipn_listener(request):
-    verify_key = request.data['verify_key']
-    # data_list = request.data
-    # #
-    # # for i in range(len(verify_key_list)):
-    # #     verify_key_list[i] = request.data[verify_key_list[i]]
-    #
-    # if hashlib.md5(data_list['store_pass']):
-    #     pass
-    #
-    #
-    #
-    # validation_url = 'https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php'
-    #
-    #
-    #
-    # params = {'year': year, 'author': author}
-    # result = requests.get(validation_url)
-    return HttpResponse(request.data)
+    store_id = "missi5b1bf9e7c190f"
+    store_passwd = "missi5b1bf9e7c190f@ssl"
+    if request.method == 'POST':
+        qs = QuestionSet.objects.create(QuestionName=request.POST.get('verify_key'))
+        qs.QuestionPrice = 5
+        # qN=hashlib.md5("fml".endcode()).hexdigest()
+
+        pre_define_key = request.POST.get('verify_key').split(',')
+
+        new_data = {}
+        if pre_define_key:
+            for value in pre_define_key:
+                if request.POST.get(value, -1) != -1:
+                    new_data[value] = request.POST.get(value)
+
+        new_data['store_passwd'] = hashlib.md5(store_passwd.encode()).hexdigest()
+
+        hash_string = ''
+
+        for key in sorted(new_data.keys()):
+            hash_string += key + '=' + new_data[key] + '&'
+
+        hash_string = hash_string.rstrip('&')
+
+        #   rs = QuestionSet.objects.create(QuestionName="why")
+        #   rs.QuestionPrice = 5
+
+        if hashlib.md5(hash_string.encode()).hexdigest() == request.POST.get('verify_sign'):
+            ts = QuestionSet.objects.create(QuestionName="wow")
+            ts.QuestionPrice = 5
+            url = 'https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php'
+            params = {'val_id': new_data['val_id'], 'store_id': store_id, 'store_passwd': store_passwd,
+                      'format': "json"}
+            r = requests.get(url, params=params)
+            ssl_final = r.json()
+            ts = QuestionSet.objects.create(QuestionName=ssl_final['status'])
+            ts.QuestionPrice = 5
+
+    return HttpResponse("fml")
