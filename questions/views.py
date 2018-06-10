@@ -1,9 +1,14 @@
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import requests
+import hashlib
 from django.db.models import Q
 from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, Profile, Board
 # Create your views here.
@@ -265,3 +270,26 @@ def get_history_user(request, user_id):
     elif request.method == 'DELETE':
         questions.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@require_POST
+@csrf_exempt
+def ipn_listener(request):
+    verify_key = request.data['verify_key']
+    # data_list = request.data
+    # #
+    # # for i in range(len(verify_key_list)):
+    # #     verify_key_list[i] = request.data[verify_key_list[i]]
+    #
+    # if hashlib.md5(data_list['store_pass']):
+    #     pass
+    #
+    #
+    #
+    # validation_url = 'https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php'
+    #
+    #
+    #
+    # params = {'year': year, 'author': author}
+    # result = requests.get(validation_url)
+    return HttpResponse(request.data)

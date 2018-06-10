@@ -32,6 +32,7 @@ urlpatterns = {
     path('c_q/<sub>/<chapter>/', views.get_chapter_question),
     path('e_history/', views.ExamHistoryList.as_view()),
     path('e_history/<user_id>', views.get_history_user),
+    path('pay/ipn_msg_listener', views.ipn_listener),
 
 }
 
