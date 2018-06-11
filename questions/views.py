@@ -191,7 +191,8 @@ def get_ex_question_y_mvd(request, year, mvd):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ExQuestion.objects.filter(QuestionId=year, MVD=mvd)
+        qSet = QuestionSet.objects.get(QuestionName=year)
+        questions = ExQuestion.objects.filter(QuestionId=qSet.id, MVD=mvd)
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
@@ -221,7 +222,8 @@ def get_ex_question_y(request, year):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ExQuestion.objects.filter(QuestionId=year)
+        qSet = QuestionSet.objects.get(QuestionName=year)
+        questions = ExQuestion.objects.filter(QuestionId=qSet.id)
         # print(chapters)
         # questions = questionsquery.objects.get(ChapterName=chapter)
         # print(questions)
