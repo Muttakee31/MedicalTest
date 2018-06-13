@@ -331,11 +331,11 @@ def ipn_listener(request):
             #     userTrans.Balance = userTrans.Balance + ssl_final['amount']
             #     userTrans.save()
             try:
-                ts = QuestionSet.objects.create(QuestionName=ssl_final['tran_id'])
+                # ts = QuestionSet.objects.create(QuestionName=ssl_final['tran_id'])
                 ts = QuestionSet.objects.create(QuestionName=ssl_final['amount'])
                 userTrans = ProfileMod.objects.get(UserID=ssl_final['tran_id'])
                 userTrans.Balance = userTrans.Balance + float(ssl_final['amount'])
-                ts = QuestionSet.objects.create(QuestionName=userTrans.Balance)
+                # ts = QuestionSet.objects.create(QuestionName=userTrans.Balance)
                 userTrans.save()
             except ObjectDoesNotExist:
                 pass
