@@ -16,7 +16,7 @@ class ProfileMod(models.Model):
     # Date_of_birth = models.DateField(null=True)
 
     class Meta:
-        db_table = 'Profile'
+        db_table = 'ProfileMod'
 
     def __str__(self):
         return str(self.name)
