@@ -11,7 +11,7 @@ import requests
 import json
 import hashlib
 from django.db.models import Q
-from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, Profile, Board
+from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, ProfileMod, Board
 # Create your views here.
 from .serializer import QuestionSetSerializer, ExamHistorySerializer, \
     ExQuestionSerializer, ChapterQuestionSerializer, ProfileSerializer, BoardSerializer
@@ -91,18 +91,18 @@ class ExamHistoryList(APIView):
 class ProfileList(APIView):
 
     def get(self, request):
-        questions = Profile.objects.all()
+        questions = ProfileMod.objects.all()
         serializer = ProfileSerializer(questions, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         data = JSONParser().parse(request)
-        qId = data['IdToken']
-        uId = data['userId']
-        print(data['IdToken'])
-        print(data['userId'])
+        eId = data['Email']
+        uId = data['UserID']
+        print(data['ProviderID'])
+        print(data['UserID'])
 
-        existent_res = Profile.objects.filter(IdToken=qId, userId=uId)
+        existent_res = ProfileMod.objects.model(UserId=uId, Email=eId)
 
         serializer = ProfileSerializer(data=data)
 
@@ -315,5 +315,10 @@ def ipn_listener(request):
             ssl_final = r.json()
             ts = QuestionSet.objects.create(QuestionName=ssl_final['status'])
             ts.QuestionPrice = 5
+
+            userTrans = ProfileMod.objects.model(UserId=ssl_final['tran_id'])
+            if userTrans:
+                userTrans.Balance = userTrans.Balance + ssl_final['amount']
+                userTrans.save()
 
     return HttpResponse("fml")

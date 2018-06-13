@@ -4,9 +4,27 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class ProfileMod(models.Model):
+    ProviderID = models.CharField(max_length=1000)
+    UserID = models.CharField(max_length=1000)
+    Name = models.CharField(max_length=1000)
+    Email = models.CharField(max_length=1000)
+    Avatar = models.ImageField(null=True)
+    Balance = models.FloatField(default=0)
+
+    # Gender = models.CharField(max_length=10, null=True)
+    # Date_of_birth = models.DateField(null=True)
+
+    class Meta:
+        db_table = 'Profile'
+
+    def __str__(self):
+        return str(self.name)
+
+
 class QuestionSet(models.Model):
     QuestionName = models.CharField(max_length=1000)
-    QuestionPrice = models.IntegerField
+    QuestionPrice = models.FloatField
 
     class Meta:
         db_table = 'QuestionSet'
@@ -55,7 +73,7 @@ class ExQuestion(models.Model):
 
 
 class ExamHistory(models.Model):
-    UserId = models.ForeignKey(User, on_delete=models.CASCADE)
+    UserId = models.ForeignKey(ProfileMod, on_delete=models.CASCADE)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
     TableName = models.CharField(max_length=255)
     Marks = models.FloatField(null=True)
@@ -78,22 +96,3 @@ class Board(models.Model):
 
     def __str__(self):
         return str(self.notice)
-
-
-class Profile(models.Model):
-    IdToken = models.CharField(max_length=1000)
-    userID = models.CharField(max_length=1000)
-    Name = models.TextField(max_length=1000)
-    Email = models.CharField(max_length=1000)
-    Avatar = models.ImageField(null=True)
-    Balance = models.IntegerField(default=0)
-    Gender = models.CharField(max_length=10, null=True)
-    Date_of_birth = models.DateField(null=True)
-
-    class Meta:
-        db_table = 'Profile'
-
-    def __str__(self):
-        return str(self.name)
-
-#just_adding_random_comment

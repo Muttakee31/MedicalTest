@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import QuestionSet
 from .models import ExQuestion
 from .models import ChapterQuestion
-from .models import ExamHistory, Profile, Board
+from .models import ExamHistory, ProfileMod, Board
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class ExamHistorySerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = ProfileMod
         fields = '__all__'
 
 
