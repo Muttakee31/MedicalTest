@@ -88,7 +88,7 @@ class ExamHistoryList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileList(APIView):
+class ProfileModList(APIView):
 
     def get(self, request):
         questions = ProfileMod.objects.all()
