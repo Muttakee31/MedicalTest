@@ -14,7 +14,7 @@ from django.db.models import Q
 from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, ProfileMod, Board
 # Create your views here.
 from .serializer import QuestionSetSerializer, ExamHistorySerializer, \
-    ExQuestionSerializer, ChapterQuestionSerializer, ProfileSerializer, BoardSerializer
+    ExQuestionSerializer, ChapterQuestionSerializer, ProfileModSerializer, BoardSerializer
 
 
 class QuestionSetList(APIView):
@@ -92,7 +92,7 @@ class ProfileList(APIView):
 
     def get(self, request):
         questions = ProfileMod.objects.all()
-        serializer = ProfileSerializer(questions, many=True)
+        serializer = ProfileModSerializer(questions, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -104,7 +104,7 @@ class ProfileList(APIView):
 
         existent_res = ProfileMod.objects.model(UserId=uId, Email=eId)
 
-        serializer = ProfileSerializer(data=data)
+        serializer = ProfileModSerializer(data=data)
 
         if serializer.is_valid():
             if not existent_res:
