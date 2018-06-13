@@ -27,7 +27,7 @@ class ExamHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamHistory
         #    fields = '__all__'
-        fields = ('UserId', 'QuestionId', 'TableName', 'marks', 'position')
+        fields = '__all__'
 
 
 class ProfileModSerializer(serializers.ModelSerializer):
