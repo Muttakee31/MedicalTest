@@ -10,6 +10,7 @@ from rest_framework.response import Response
 import requests
 import json
 import hashlib
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from .models import QuestionSet, ExQuestion, ChapterQuestion, ExamHistory, ProfileMod, Board
 # Create your views here.
@@ -71,21 +72,30 @@ class ExamHistoryList(APIView):
 
     def post(self, request):
         data = JSONParser().parse(request)
-        qId = data['QuestionId']
-        uId = data['UserId']
-        print(data['QuestionId'])
-        print(data['UserId'])
-
-        existent_res = ExamHistory.objects.filter(QuestionId=qId, UserId=uId)
-
-        serializer = ExamHistorySerializer(data=data)
-
-        if serializer.is_valid():
-            if not existent_res:
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response("notSaved", status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # qId = data['QuestionId']
+        # uId = data['UserId']
+        #        print(data['QuestionId'])
+        #        print(data['UserId'])
+        existent_user = ProfileMod.objects.get(UserID=data['UserId'])
+        existent_question = QuestionSet.objects.get(id=int(data['QuestionId']))
+        try:
+            existent_res = ExamHistory.objects.get(QuestionId=data['QuestionId'], UserId=existent_user.id)
+            existent_res.Marks = float(data['Marks'])
+            existent_res.save()
+        except ObjectDoesNotExist:
+            # ts = ExamHistory.objects.create(UserId=existent_user.id, QuestionId=int(data['QuestionId']))
+            # ts.TableName=data['TableName']
+            # ts.Marks=float(data['Marks'])
+            ts = ExamHistory()
+            ts.UserId = existent_user
+            ts.QuestionId = existent_question
+            ts.TableName = data['TableName']
+            ts.Marks = float(data['Marks'])
+            ts.save()
+            ps = QuestionSet.objects.create(QuestionName="kheleche")
+            return Response("done", status=status.HTTP_201_CREATED)
+        return Response("notSaved", status=status.HTTP_201_CREATED)
+        # return Response("NO User This Name", status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProfileModList(APIView):
@@ -99,18 +109,20 @@ class ProfileModList(APIView):
         data = JSONParser().parse(request)
         eId = data['Email']
         uId = data['UserID']
-        print(data['ProviderID'])
-        print(data['UserID'])
+        # print(data['ProviderID'])
+        # print(data['UserID'])
 
-        existent_res = ProfileMod.objects.model(UserId=uId, Email=eId)
+        existent_res = ProfileMod.objects.filter(UserID=uId, Email=eId)
 
         serializer = ProfileModSerializer(data=data)
 
         if serializer.is_valid():
-            if not existent_res:
+            if existent_res:
+                return Response("notSaved", status=status.HTTP_201_CREATED)
+            else:
+                ts = QuestionSet.objects.create(QuestionName=eId)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response("notSaved", status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -315,10 +327,17 @@ def ipn_listener(request):
             ssl_final = r.json()
             ts = QuestionSet.objects.create(QuestionName=ssl_final['status'])
             ts.QuestionPrice = 5
-
-            userTrans = ProfileMod.objects.model(UserId=ssl_final['tran_id'])
-            if userTrans:
-                userTrans.Balance = userTrans.Balance + ssl_final['amount']
+            # if userTrans:
+            #     userTrans.Balance = userTrans.Balance + ssl_final['amount']
+            #     userTrans.save()
+            try:
+                ts = QuestionSet.objects.create(QuestionName=ssl_final['tran_id'])
+                ts = QuestionSet.objects.create(QuestionName=ssl_final['amount'])
+                userTrans = ProfileMod.objects.get(UserID=ssl_final['tran_id'])
+                userTrans.Balance = userTrans.Balance + float(ssl_final['amount'])
+                ts = QuestionSet.objects.create(QuestionName=userTrans.Balance)
                 userTrans.save()
+            except ObjectDoesNotExist:
+                pass
 
     return HttpResponse("fml")

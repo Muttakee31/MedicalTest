@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class ProfileMod(models.Model):
-    ProviderID = models.CharField(max_length=1000)
+    Provider_Name = models.CharField(max_length=1000)
     UserID = models.CharField(max_length=1000)
     Name = models.CharField(max_length=1000)
     Email = models.CharField(max_length=1000)
@@ -19,7 +19,7 @@ class ProfileMod(models.Model):
         db_table = 'ProfileMod'
 
     def __str__(self):
-        return str(self.name)
+        return str(self.Name)
 
 
 class QuestionSet(models.Model):
@@ -62,7 +62,7 @@ class ExQuestion(models.Model):
     Option2 = models.CharField(max_length=1000)
     Option3 = models.CharField(max_length=1000)
     Option4 = models.CharField(max_length=1000)
-    CorrectAns = models.CharField(max_length=5)
+    CorrectAns = models.CharField(max_length=1000)
     Equation = models.ImageField(null=True)
 
     class Meta:
@@ -83,7 +83,7 @@ class ExamHistory(models.Model):
         db_table = 'ExamHistory'
 
     def __str__(self):
-        return str(self.marks)
+        return str(self.Marks)
 
 
 class Board(models.Model):
@@ -95,4 +95,4 @@ class Board(models.Model):
         db_table = 'Noticeboard'
 
     def __str__(self):
-        return str(self.notice)
+        return str(self.Notice)
