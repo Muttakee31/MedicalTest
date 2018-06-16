@@ -34,6 +34,7 @@ urlpatterns = {
     path('e_history/<user_id>', views.get_history_user),
     path('pay/ipn_msg_listener', views.ipn_listener),
     path('profile_mod/', views.ProfileModList.as_view()),
+    path('profile_mod/<user_id>/', views.get_user),
     path('board/', views.BoardList.as_view())
 
 }

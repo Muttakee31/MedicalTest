@@ -287,6 +287,35 @@ def get_history_user(request, user_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET', 'PUT', 'DELETE'])
+def get_user(request, user_id):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        questions = ProfileMod.objects.get(UserID=user_id)
+        # print(chapters)
+        # questions = questionsquery.objects.get(ChapterName=chapter)
+        # print(questions)
+    except ProfileMod.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ProfileModSerializer(questions)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        #serializer = ExamHistorySerializer(questions, data=request.data)
+        #if serializer.is_valid():
+        #   serializer.save()
+        #    return Response(serializer.data)
+        return Response("no_put_here", status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        #questions.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 @require_POST
 @csrf_exempt
 def ipn_listener(request):
