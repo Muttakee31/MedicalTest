@@ -166,6 +166,43 @@ def get_chapter_question(request, sub, chapter):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+
+
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def get_id_question(request, qid):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        qset = QuestionSet.objects.get(id=qid)
+        questions = ChapterQuestion.objects.filter(QuestionId=qset)
+        # print(chapters)
+        # questions = questionsquery.objects.get(ChapterName=chapter)
+        # print(questions)
+    except ChapterQuestion.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ChapterQuestionSerializer(questions, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ChapterQuestionSerializer(questions, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        questions.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def get_chapter(request, sub):
     """
@@ -264,9 +301,9 @@ def get_history_user(request, user_id):
     Retrieve, update or delete a code snippet.
     """
     try:
-        questions = ExamHistory.objects.filter(UserId=user_id)
+        q = ProfileMod.objects.get(UserID=user_id)
         # print(chapters)
-        # questions = questionsquery.objects.get(ChapterName=chapter)
+        questions = ExamHistory.objects.filter(UserId=q)
         # print(questions)
     except ExamHistory.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

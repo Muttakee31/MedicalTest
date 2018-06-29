@@ -28,6 +28,9 @@ urlpatterns = {
     #   path('c_q/(?P<pk>[0-9]+)', views.get_chapter_question),
     #   url(r'^c_q/(?P<pk>[0-9]+)$', views.get_chapter_question),
     path('c_q/', views.ChapterQuestionList.as_view()),
+
+    path('c_q/<qid>/', views.get_id_question),
+
     path('c_q/<sub>/', views.get_chapter),
     path('c_q/<sub>/<chapter>/', views.get_chapter_question),
     path('e_history/', views.ExamHistoryList.as_view()),
