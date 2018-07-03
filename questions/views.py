@@ -81,6 +81,7 @@ class ExamHistoryList(APIView):
         try:
             existent_res = ExamHistory.objects.get(QuestionId=data['QuestionId'], UserId=existent_user.id)
             existent_res.Marks = float(data['Marks'])
+            existent_res.UserName = data['UserName']
             existent_res.save()
         except ObjectDoesNotExist:
             # ts = ExamHistory.objects.create(UserId=existent_user.id, QuestionId=int(data['QuestionId']))
@@ -166,10 +167,6 @@ def get_chapter_question(request, sub, chapter):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
-
-
 @api_view(['GET', 'PUT', 'DELETE'])
 def get_id_question(request, qid):
     """
@@ -198,9 +195,6 @@ def get_id_question(request, qid):
     elif request.method == 'DELETE':
         questions.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -325,6 +319,36 @@ def get_history_user(request, user_id):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+def get_history_daily(request, exam_name):
+    """
+    Retrieve, update or delete a code snippet.
+    """
+    try:
+        q = QuestionSet.objects.get(QuestionName=exam_name)
+        # print(exam_name)
+        # print(chapters)
+        questions = ExamHistory.objects.filter(QuestionId=q)
+        # print(questions)
+    except ExamHistory.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ExamHistorySerializer(questions, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ExamHistorySerializer(questions, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        questions.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
 def get_user(request, user_id):
     """
     Retrieve, update or delete a code snippet.
@@ -342,14 +366,14 @@ def get_user(request, user_id):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        #serializer = ExamHistorySerializer(questions, data=request.data)
-        #if serializer.is_valid():
+        # serializer = ExamHistorySerializer(questions, data=request.data)
+        # if serializer.is_valid():
         #   serializer.save()
         #    return Response(serializer.data)
         return Response("no_put_here", status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        #questions.delete()
+        # questions.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
