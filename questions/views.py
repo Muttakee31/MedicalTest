@@ -77,24 +77,80 @@ class ExamHistoryList(APIView):
         #        print(data['QuestionId'])
         #        print(data['UserId'])
         existent_user = ProfileMod.objects.get(UserID=data['UserId'])
-        existent_question = QuestionSet.objects.get(id=int(data['QuestionId']))
+
+        if data['QuestionId'] == 7070809 and data['Marks'] == 666:
+            needed_balance = 900000
+            try:
+                superC = ExamHistory.objects.get(QuestionName=data['QuestionName'], UserId=existent_user.id)
+                serializer = ExamHistorySerializer(superC)
+                # ps = QuestionSet.objects.create(QuestionName="kheleche")
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except ObjectDoesNotExist:
+                if data['TableName'] == 'PMA':
+                    superL = QuestionSet.objects.get(QuestionName='SUPERMED')
+                    needed_balance = 100.0
+                elif data['TableName'] == 'PVA':
+                    superL = QuestionSet.objects.get(QuestionName='SUPERVAR')
+                    needed_balance = 75.0
+                available_money = existent_user.Balance
+                if available_money - needed_balance > 0:
+                    existent_user.Balance = available_money - needed_balance
+                    existent_user.save()
+
+                    ts = ExamHistory()
+                    ts.UserId = existent_user
+                    ts.UserName = existent_user.Name
+                    ts.QuestionName = superL.QuestionName
+                    ts.QuestionId = superL
+                    ts.TableName = data['TableName']
+                    ts.Marks = float(data['Marks'])
+                    ts.save()
+                    serializer = ExamHistorySerializer(ts)
+                    # ps = QuestionSet.objects.create(QuestionName="kheleche")
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+                    # return Response("done", status=status.HTTP_201_CREATED)
+                else:
+                    return Response("not_done", status=status.HTTP_201_CREATED)
+
+        else:
+            existent_question = QuestionSet.objects.get(QuestionName=(data['QuestionName']))
         try:
-            existent_res = ExamHistory.objects.get(QuestionId=data['QuestionId'], UserId=existent_user.id)
+
+            existent_res = ExamHistory.objects.get(QuestionId=existent_question.id, UserId=existent_user.id)
             existent_res.Marks = float(data['Marks'])
-            existent_res.UserName = data['UserName']
+            existent_res.QuestionName = existent_question.QuestionName
+            existent_res.UserName = existent_user.Name
             existent_res.save()
+            serializer = ExamHistorySerializer(existent_res)
+            # ps = QuestionSet.objects.create(QuestionName="kheleche")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
             # ts = ExamHistory.objects.create(UserId=existent_user.id, QuestionId=int(data['QuestionId']))
             # ts.TableName=data['TableName']
             # ts.Marks=float(data['Marks'])
             ts = ExamHistory()
             ts.UserId = existent_user
+            ts.UserName = existent_user.Name
             ts.QuestionId = existent_question
+            ts.QuestionName = existent_question.QuestionName
             ts.TableName = data['TableName']
             ts.Marks = float(data['Marks'])
+            available_money = existent_user.Balance
+
+            try:
+                superC = ExamHistory.objects.get(QuestionName='SUPERMED', UserId=existent_user.id)
+            except ObjectDoesNotExist:
+                try:
+                    superD = ExamHistory.objects.get(QuestionName='SUPERVAR', UserId=existent_user.id)
+                except ObjectDoesNotExist:
+                    if available_money - 3.0 >= 0:
+                        existent_user.Balance = available_money - 3.0
+                        existent_user.save()
             ts.save()
-            ps = QuestionSet.objects.create(QuestionName="kheleche")
-            return Response("done", status=status.HTTP_201_CREATED)
+            serializer = ExamHistorySerializer(ts)
+            # ps = QuestionSet.objects.create(QuestionName="kheleche")
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response("notSaved", status=status.HTTP_201_CREATED)
         # return Response("NO User This Name", status=status.HTTP_400_BAD_REQUEST)
 

@@ -76,6 +76,7 @@ class ExamHistory(models.Model):
     UserId = models.ForeignKey(ProfileMod, on_delete=models.CASCADE)
     UserName = models.CharField(max_length=500, null=True)
     QuestionId = models.ForeignKey(QuestionSet, on_delete=models.CASCADE)
+    QuestionName = models.CharField(max_length=10000, null=True)
     TableName = models.CharField(max_length=255)
     Marks = models.FloatField(null=True)
     Position = models.IntegerField(null=True)
