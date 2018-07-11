@@ -39,5 +39,5 @@ class ProfileModSerializer(serializers.ModelSerializer):
 class BoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
-        fields = '__all__'
+        fields = ('id', 'Notice')
 

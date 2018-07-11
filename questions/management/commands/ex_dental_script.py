@@ -13,7 +13,7 @@ class Command(BaseCommand):
             sheet = workbook.sheet_by_name(worksheet_names[i])
             print(i)
             print("FML")
-            for j in range(1, 101):
+            for j in range(1, sheet.nrows):
                 qS = QuestionSet()
                 cQ = ExQuestion()
                 cQ.MVD = "D"
@@ -27,12 +27,12 @@ class Command(BaseCommand):
                 cQ.Option2 = sheet.cell(j, 3).value
                 cQ.Option3 = sheet.cell(j, 4).value
                 cQ.Option4 = sheet.cell(j, 5).value
-                if QuestionSet.objects.filter(QuestionName=worksheet_names[i]).exists():
+                if QuestionSet.objects.filter(QuestionName=worksheet_names[i]+'D').exists():
                     pass
                 else:
-                    qS = QuestionSet.objects.create(QuestionName=worksheet_names[i])
+                    qS = QuestionSet.objects.create(QuestionName=worksheet_names[i]+'D')
                     qS.QuestionPrice = 5
-                qS = QuestionSet.objects.get(QuestionName=worksheet_names[i])
+                qS = QuestionSet.objects.get(QuestionName=worksheet_names[i]+'D')
                 cQ.QuestionId = qS
                 cQ.CorrectAns = sheet.cell(j, 6).value
 

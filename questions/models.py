@@ -90,8 +90,7 @@ class ExamHistory(models.Model):
 
 class Board(models.Model):
     Notice = models.CharField(max_length=10000)
-    Due_date = models.DateTimeField(null=True)
-    Created_at = models.DateTimeField(auto_now_add=True)
+    Created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         db_table = 'Noticeboard'

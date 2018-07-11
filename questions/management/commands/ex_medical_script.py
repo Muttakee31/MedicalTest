@@ -25,12 +25,12 @@ class Command(BaseCommand):
                 cQ.Option2 = sheet.cell(j, 3).value
                 cQ.Option3 = sheet.cell(j, 4).value
                 cQ.Option4 = sheet.cell(j, 5).value
-                if QuestionSet.objects.filter(QuestionName=worksheet_names[i]).exists():
+                if QuestionSet.objects.filter(QuestionName=worksheet_names[i]+'M').exists():
                     pass
                 else:
-                    qS = QuestionSet.objects.create(QuestionName=worksheet_names[i])
+                    qS = QuestionSet.objects.create(QuestionName=worksheet_names[i]+'M')
                     qS.QuestionPrice = 5
-                qS = QuestionSet.objects.get(QuestionName=worksheet_names[i])
+                qS = QuestionSet.objects.get(QuestionName=worksheet_names[i]+'M')
                 cQ.QuestionId = qS
                 cQ.CorrectAns = sheet.cell(j, 6).value
 
